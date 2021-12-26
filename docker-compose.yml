@@ -28,10 +28,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - caddy:/data
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./site:/srv
-      - caddy_data:/data
-      - caddy_config:/config
   # nginx:
   #       restart: always
   #       build:
@@ -40,5 +38,4 @@ services:
   #           - "80:80"
 volumes:
   postgres:
-  caddy_data:
-  caddy_config:
+  caddy:
