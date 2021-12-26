@@ -1,6 +1,11 @@
 
 caddy.milldev.click {
-  reverse_proxy server:4000/api  {
+  reverse_proxy server:4000  {
     header_down Strict-Transport-Security max-age=31536000;
    }
+}
+
+
+milldev.localhost {
+  reverse_proxy server:4000
 }
