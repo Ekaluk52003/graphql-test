@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - '5433:5432'
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_USER: 'docker'
+      POSTGRES_DB: 'mydb'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  server:
+    build: .
+    environment:
+      DATABASE_URL: 'postgresql://docker:123456@db:5432/mydb?schema=public'
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app/
+      - /app/node_modules
+   # Run the caddy server
+  caddy:
+    image: caddy/caddy:2.2.1-alpine
+    container_name: caddy-service
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      # - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+  # nginx:
+  #       restart: always
+  #       build:
+  #           context: ./nginx
+  #       ports:
+  #           - "80:80"
+volumes:
+  caddy_data:
+  caddy_config:
+  postgres:
